@@ -1,9 +1,14 @@
 Rails.application.routes.draw do
-  get 'users/new'
-  get 'users/index'
-  get 'users/create'
-  get 'users/edit'
-  get 'users/show'
-  get 'users/destroy'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  root 'users#index'
+  get 'my' => 'users#index' 
+  post 'signin' => 'sessions#create'
+  post 'logout' => 'sessions#destroy'
+  post 'signup' => 'users#create'
+  
+  resources :users, only: [:index, :update, :create, :show] do
+    member do
+      patch :update
+      get :show
+    end
+  end
 end

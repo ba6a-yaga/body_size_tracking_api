@@ -1,0 +1,18 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+ba6aYaga:
+  fullname: Dima Petrenko
+  email: pedro@ya.ru
+  password_digest: <%= User.digest('test12') %>
+  waist: 100
+  hips: 100
+  chest: 100
+
+
+devopsd:
+  fullname: Vasya Pupkin
+  email: pup_epta@ya.ru
+  password_digest: <%= User.digest('test12') %>
+  waist: 100
+  hips: 100
+  chest: 100
