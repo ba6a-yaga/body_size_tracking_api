@@ -12,10 +12,11 @@ class UsersSigninTest < ActionDispatch::IntegrationTest
           password: "test12"
         }
       }
+
+      assert_response :success
       response = JSON.parse(@response.body)
       assert_equal "Vasya Pupkin", response["user"]["fullname"] 
-      assert response["token"].length > 0
-      assert_response :success
+      assert @response.header["X-BDS-M-AUTH-TOKEN"].length > 0
   end
 
   test "login with password invalid info" do 
@@ -25,8 +26,8 @@ class UsersSigninTest < ActionDispatch::IntegrationTest
           password: "test"
         }
       }
-    response = JSON.parse(@response.body)
     assert_response :unprocessable_entity
+    response = JSON.parse(@response.body)
     assert response["errors"].count == 1
   end
 
@@ -37,8 +38,8 @@ class UsersSigninTest < ActionDispatch::IntegrationTest
           password: "test"
         }
       }
-    response = JSON.parse(@response.body)
     assert_response :unprocessable_entity
+    response = JSON.parse(@response.body)
     assert response["errors"].count == 1
   end
 end

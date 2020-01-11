@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   
   resources :users, only: [:index, :update, :create, :show] do
     member do
-      patch :update
+      post :update
       get :show
     end
   end

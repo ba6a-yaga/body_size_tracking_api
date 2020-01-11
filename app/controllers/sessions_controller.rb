@@ -1,10 +1,12 @@
 class SessionsController < ApplicationController
+  after_action :add_headers, only: [:create]
+
   def create 
     @user = User.find_by(email: params[:session][:email].downcase)
     if @user && @user.authenticate(params[:session][:password])
-      token = sign_in @user
+      sign_in @user
       user = @user.attributes.slice("id", "fullname", "email", "waist", "hips", "chest")
-      render json: {:token => token, :user => user}
+      render json: {:user => user}
     else     
       if !@user 
         @user = User.new

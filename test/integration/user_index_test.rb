@@ -14,14 +14,14 @@ class UserIndexTest < ActionDispatch::IntegrationTest
       }
       assert_response :success
       response_signin = JSON.parse(@response.body)
-
-      get my_path,  
-        params: {
-          user: {
-            id: @user.id,
-            auth_token: response_signin["token"]
-          }
+      
+      get my_path, 
+        headers: {
+          "X-BDS-M-AUTH-TOKEN": @response.header["X-BDS-M-AUTH-TOKEN"],
+          "X-BDS-M-USER-ID": response_signin["user"]["id"]
         }
+
+        
       assert_response :success
   end
 
@@ -35,11 +35,8 @@ class UserIndexTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     get my_path,  
-      params: {
-        user: {
-          auth_token: "token"
-        }
-      }
+      headers: {"X-BDS-M-AUTH-TOKEN": "INVALID_TOKEN"}
+
     assert_response :unauthorized
   end
 end
