@@ -5,10 +5,11 @@ Rails.application.routes.draw do
   post 'logout' => 'sessions#destroy'
   post 'signup' => 'users#create'
   
-  resources :users, only: [:index, :update, :create, :show] do
+  resources :users, only: [:index, :update, :create, :show, :body_sizing] do
     member do
-      post :update
+      patch :update
       get :show
+      post :body_sizing 
     end
   end
 end

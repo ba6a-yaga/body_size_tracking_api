@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_action :check_header, only: [:index, :update, :show]
-  before_action :check_user_id, only: [:index, :update, :show]
-  after_action :add_headers, only: [:index, :update, :show, :create]
+  before_action :check_header, only: [:index, :update, :show, :body_sizing]
+  before_action :check_user_id, only: [:index, :update, :show, :body_sizing]
+  after_action :add_headers, only: [:create]
 
   def index
     if logged_in?
@@ -34,7 +34,7 @@ class UsersController < ApplicationController
         render :json => {:errors => user.errors.messages}, :status => :unprocessable_entity
       end
     else
-      render :json => {:auth_token => @auth_token, :user_id => @user_id, :header_token => request.headers["X-BDS-M-AUTH-TOKEN"], :header_user_id => request.headers["X-BDS-M-USER-ID"]}, :status => :unauthorized
+      head :unauthorized
     end
   end
 
@@ -52,7 +52,24 @@ class UsersController < ApplicationController
   end
 
   def body_sizing
-    
+    if logged_in?
+      uri = URI("http://85.143.176.51")
+      uri.port = 9999
+      http = Net::HTTP.new(uri.host, uri.port)
+      req = Net::HTTP::Get.new("/?image_url=#{params[:user][:photo]}")
+      resp = http.request(req)
+        
+      user = current_user
+      user = user.attributes.slice("id", "fullname", "email", "waist", "hips", "chest")
+      response_body_sizing = JSON.parse(resp.body)
+      user["hips"] = response_body_sizing["hips"]
+      user["waist"] = response_body_sizing["waists"]
+      user["chest"] = response_body_sizing["breasts"]
+      render json: {:user => user}
+      
+    else 
+      head :unauthorized
+    end
   end
 
   private

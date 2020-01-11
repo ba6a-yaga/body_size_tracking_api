@@ -21,7 +21,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
       assert_equal "Vasya Pupkin", response_signin["user"]["fullname"] 
       assert response_signin["user"]["id"] > 0
       
-      post user_url(@user), 
+      patch user_url(@user), 
         params: {
           user: {
             fullname: "Vasiliy Pupkevich",
@@ -77,7 +77,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     assert_response :success
     response_signin = JSON.parse(@response.body)
     
-    post user_url(@user),  
+    patch user_url(@user),  
       params: {
         user: {
           fullname: "Vasiliy Pupkevich",

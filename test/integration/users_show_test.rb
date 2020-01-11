@@ -28,7 +28,6 @@ class UsersShowTest < ActionDispatch::IntegrationTest
         }
 
       assert_response :success
-      assert @response.header["X-BDS-M-AUTH-TOKEN"].length > 0
   
   end
 
