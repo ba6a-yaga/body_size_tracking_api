@@ -1,5 +1,6 @@
 class User < ApplicationRecord
     attr_accessor :remember_token
+    attr_accessor :reset_password_token
     attr_accessor :auth_token
     before_save { self.email = email.downcase }
 
@@ -51,5 +52,13 @@ class User < ApplicationRecord
     # Забывть пользователя
     def forget 
         update_attribute(:remember_digest, nil)
+    end
+
+    # Генерация токена сброса пароля
+    def reset_password
+        self.reset_password_token = User.new_token
+        if update_attribute(:reset_password_digest, User.digest(self.reset_password_token)) 
+            self.reset_password_token
+        end
     end
 end

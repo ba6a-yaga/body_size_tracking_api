@@ -5,7 +5,8 @@ class UsersController < ApplicationController
 
   def index
     if logged_in?
-      user = current_user.attributes.slice("id", "fullname", "email", "waist", "hips", "chest")
+      user = current_user.attributes.slice("id", "fullname", "email", "waist", "hips", "chest", 
+        "height", "waist_to_top", "arms", "waist_to_bottom", "head")
       render json: {:user => user}
     else
       head :unauthorized
@@ -16,7 +17,8 @@ class UsersController < ApplicationController
     @user = User.new(user_params) 
     if @user.save
       sign_in @user
-      user = @user.attributes.slice("id", "fullname", "email", "waist", "hips", "chest")
+      user = @user.attributes.slice("id", "fullname", "email", "waist", "hips", "chest"
+        "height", "waist_to_top", "arms", "waist_to_bottom", "head")
       render json: {:user => user}, status: :created
     else
       render json: {:errors => @user.errors.messages}, status: :unprocessable_entity
@@ -28,7 +30,8 @@ class UsersController < ApplicationController
       user = current_user
       user.update_attributes(user_params)
       if user.valid?
-        user_slice = user.attributes.slice("id", "fullname", "email", "waist", "hips", "chest")
+        user_slice = user.attributes.slice("id", "fullname", "email", "waist", "hips", "chest", 
+          "height", "waist_to_top", "arms", "waist_to_bottom", "head")
         render json: {:user => user_slice}
       else
         render :json => {:errors => user.errors.messages}, :status => :unprocessable_entity
@@ -41,7 +44,8 @@ class UsersController < ApplicationController
   def show
     if logged_in?
       if (@user = User.find_by(id: @user_id))
-        user = @user.attributes.slice("id", "fullname", "email", "waist", "hips", "chest")
+        user = @user.attributes.slice("id", "fullname", "email", "waist", "hips", "chest",
+          "height", "waist_to_top", "arms", "waist_to_bottom", "head")
         render json: {:user => user}
       else
         head :not_found
@@ -75,9 +79,10 @@ class UsersController < ApplicationController
   private
 
     def user_params
-      params.require(:user).permit(:fullname, :email, :password, 
-      :password_confirmation, 
-      :waist, :hips, :chest)
+      params.require(:user).permit(:fullname, :email, :id, 
+        :password, 
+        :password_confirmation, 
+        :waist, :hips, :chest, :height, :arms, :waist_to_top, :waist_to_bottom, :head)
     end
   
 end
