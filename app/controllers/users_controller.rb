@@ -17,7 +17,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params) 
     if @user.save
       sign_in @user
-      user = @user.attributes.slice("id", "fullname", "email", "waist", "hips", "chest"
+      user = @user.attributes.slice("id", "fullname", "email", "waist", "hips", "chest",
         "height", "waist_to_top", "arms", "waist_to_bottom", "head")
       render json: {:user => user}, status: :created
     else
